@@ -10,7 +10,7 @@ HEADERS = {
     "User-Agent": "DiscordTodayInHistory/1.0 (personal friends server)",
     "Content-Type": "application/json",
 }
-HOW_MANY = 5  # events to post
+HOW_MANY = 3  # events to post
 
 
 def fetch_events(now):
