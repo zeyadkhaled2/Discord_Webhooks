@@ -62,7 +62,7 @@ def main():
         return
     body = json.dumps({
         "username": "Epic Free Games",
-        "content": "🎮 **Free on Epic Games this week!**",
+        "content": "🎮 **Well, well, well. Look what decided to show up.!**",
         "embeds": embeds[:10],
     }).encode()
     req = urllib.request.Request(WEBHOOK, data=body, headers=HEADERS)
