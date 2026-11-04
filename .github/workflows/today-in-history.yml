@@ -1,0 +1,19 @@
+name: Today in history
+ 
+on:
+  schedule:
+    - cron: "0 7 * * *"   # every day at 07:00 UTC, change the hour to taste
+  workflow_dispatch:       # lets you run it manually to test
+ 
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python today_in_history.py
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+ 
