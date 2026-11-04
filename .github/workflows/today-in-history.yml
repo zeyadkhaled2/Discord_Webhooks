@@ -15,5 +15,5 @@ jobs:
           python-version: "3.12"
       - run: python today_in_history.py
         env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL_2 }}
  
