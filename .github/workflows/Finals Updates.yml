@@ -1,0 +1,21 @@
+name: THE FINALS updates
+ 
+on:
+  schedule:
+    - cron: "0 16 * * *"   # every day at 16:00 UTC, change the hour to taste
+  workflow_dispatch:        # lets you run it manually to test
+ 
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python finals_updates.py
+        env:
+          # left side must stay DISCORD_WEBHOOK_URL; change only the right side
+          # if your secret has a different name
+          DISCORD_WEBHOOK_URL_4: ${{ secrets.DISCORD_WEBHOOK_URL_4 }}
+ 
