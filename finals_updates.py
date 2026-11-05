@@ -6,7 +6,7 @@ import urllib.request
 
 WEBHOOK = os.environ["DISCORD_WEBHOOK_URL_4"]
 APP_ID = 2073850          # THE FINALS on Steam
-LOOKBACK_HOURS = 25       # post anything newer than this (matches a daily run)
+LOOKBACK_HOURS = 720       # post anything newer than this (matches a daily run)
 KEYWORDS = []             # e.g. ["update", "patch", "season"] to only post matching titles
 MAX_CHARS = 1500          # how much of each announcement to show
 
