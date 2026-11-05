@@ -5,7 +5,7 @@ import re
 import urllib.request
 import xml.etree.ElementTree as ET
  
-WEBHOOK = os.environ["DISCORD_WEBHOOK_URL_3"]
+WEBHOOK = os.environ["DISCORD_WEBHOOK_URL"]
 HEADERS = {"User-Agent": "Mozilla/5.0 (DiscordNewsDigest/1.0)"}
 JSON_HEADERS = {**HEADERS, "Content-Type": "application/json"}
  
