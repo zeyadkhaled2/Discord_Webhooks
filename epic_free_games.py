@@ -109,9 +109,9 @@ def build_embeds(games):
                     "```ansi\n"
                     "\u001b[1;32m✨ 100% FREE TO KEEP FOREVER\u001b[0m \u001b[1;36m• WEEKLY DROP\u001b[0m\n"
                     "```\n"
-                    f"# 🔥 [{g['title']}]({url})\n"
+                    f"### 🔥 [{g['title']}]({url})\n"
                     f"> {short_desc}\n\n"
-                    f"## 👉 [🛒 CLAIM FREE GAME NOW ↗]({url})"
+                    f"👉 **[🛒 Claim Free Game Now ↗]({url})**"
                 ),
                 "color": color,
                 "fields": [
@@ -139,7 +139,7 @@ def build_embeds(games):
                 "```ansi\n"
                 "\u001b[1;35m🔮 NEXT WEEK'S ROTATION\u001b[0m \u001b[1;33m• SNEAK PEEK\u001b[0m\n"
                 "```\n"
-                "# 🔮 Coming Soon\n"
+                "### 🔮 Coming Next Week\n"
                 + "\n".join(upcoming_lines[:5])
                 + f"\n\n-# 👉 [Browse All Epic Freebies ↗]({STORE_URL})"
             ),
@@ -159,7 +159,7 @@ def main():
     body = json.dumps({
         "username": "Epic Store • Freebie Radar",
         "content": (
-            "# 🎁 **This Week's Free Games Are Live!**\n"
+            "### 🎁 **This Week's Free Games Are Live!**\n"
             f"-# Grab them before the rotation resets • Checked <t:{now_ts}:R>"
         ),
         "embeds": embeds[:10],

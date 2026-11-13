@@ -86,7 +86,7 @@ def main():
             best_thumb = thumb
 
         sections.append(
-            f"# {badge} [{year} — {page_title}]({page_url}) {ago_tag}\n"
+            f"### {badge} [{year} — {page_title}]({page_url}) {ago_tag}\n"
             f"> {text}\n"
             f"-# 👉 [Read more about **{page_title}** ↗]({page_url})"
         )
@@ -101,10 +101,10 @@ def main():
             extra_lines.append(f"• **`{yr}`** — {txt}")
         spoiler = "\n".join(extra_lines)
         sections.append(
-            f"### ➕ Bonus Moments *(click below to reveal)*\n||{spoiler}||"
+            f"🔽 **Bonus Historical Moments *(click box to expand)*:**\n||{spoiler}||"
         )
 
-    sections.append(f"## 👉 [📖 Explore All Events for {date_label} on Wikipedia ↗]({day_wiki_url})")
+    sections.append(f"👉 **[📖 Explore All Events for {date_label} on Wikipedia ↗]({day_wiki_url})**")
 
     embed = {
         "author": {
@@ -121,7 +121,7 @@ def main():
     body = json.dumps({
         "username": "Time Capsule • On This Day",
         "content": (
-            f"# ☕ **Daily Time Capsule — {date_label}**\n"
+            f"### ☕ **Daily Time Capsule — {date_label}**\n"
             f"-# Remarkable moments across history that happened on this exact date"
         ),
         "embeds": [embed],

@@ -76,7 +76,7 @@ def build_feed_embed(name, badge, ansi_color, site_url, color, items, featured_c
 
     sections = [
         f"```ansi\n{ansi_color}🌍 {name.upper()}\u001b[0m \u001b[1;36m• BREAKING & TOP STORIES\u001b[0m\n```",
-        f"# 🚨 [{lead['title'][:180]}]({lead['link']})",
+        f"### 🚨 [{lead['title'][:180]}]({lead['link']})",
     ]
     if lead_desc:
         sections.append(f"> {lead_desc}")
@@ -85,9 +85,9 @@ def build_feed_embed(name, badge, ansi_color, site_url, color, items, featured_c
     featured = items[1:featured_count]
     if featured:
         for idx, entry in enumerate(featured, 2):
-            rel = f" `({idx})`"
+            rel = f" `#{idx}`"
             time_tag = f" • <t:{entry['pub_ts']}:R>" if entry.get("pub_ts") else ""
-            line = f"## 🔹 [{entry['title'][:160]}]({entry['link']}){rel}"
+            line = f"### 🔹 [{entry['title'][:160]}]({entry['link']}){rel}"
             if entry.get("desc"):
                 short = entry["desc"]
                 if len(short) > 130:
@@ -102,9 +102,9 @@ def build_feed_embed(name, badge, ansi_color, site_url, color, items, featured_c
         for idx, ex in enumerate(extras, featured_count + 1):
             spoiler_lines.append(f"**{idx}.** [{ex['title'][:120]}]({ex['link']})")
         sections.append(
-            "### ➕ More Headlines *(click box to expand)*\n"
+            "🔽 **More Headlines *(click box to expand)*:**\n"
             + "||" + "\n".join(spoiler_lines) + "||\n"
-            + f"## 👉 [📰 Browse All {name} Headlines ↗]({site_url})"
+            + f"👉 **[📰 Browse All {name} Headlines ↗]({site_url})**"
         )
 
     embed = {
@@ -114,7 +114,7 @@ def build_feed_embed(name, badge, ansi_color, site_url, color, items, featured_c
         },
         "description": "\n\n".join(sections)[:4000],
         "color": color,
-        "footer": {"text": f"{badge} {name} • Major stories in large font • Click spoiler for more"},
+        "footer": {"text": f"{badge} {name} • Click any blue headline to read more"},
     }
     if lead.get("thumb"):
         embed["thumbnail"] = {"url": lead["thumb"]}
@@ -143,8 +143,8 @@ def main():
     body = json.dumps({
         "username": "Morning Briefing • World Desk",
         "content": (
-            f"# ☕ **World News Briefing — {today}**\n"
-            f"-# Major headlines in large print • Updated <t:{now_ts}:R>"
+            f"### ☕ **World News Briefing — {today}**\n"
+            f"-# Curated international headlines • Updated <t:{now_ts}:R>"
         ),
         "embeds": embeds,
     }).encode()
