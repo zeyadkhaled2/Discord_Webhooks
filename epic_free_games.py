@@ -9,6 +9,8 @@ API = ("https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions"
 HEADERS = {"User-Agent": "Mozilla/5.0", "Content-Type": "application/json"}
 STORE_URL = "https://store.epicgames.com/en-US/free-games"
 
+CARD_COLORS = [0x00E676, 0x00E5FF, 0xFFB800, 0xFF1E56]
+
 
 def fetch_games():
     req = urllib.request.Request(API, headers=HEADERS)
@@ -69,10 +71,10 @@ def original_price_label(game):
     try:
         fmt = game["price"]["totalPrice"]["fmtPrice"]["originalPrice"]
         if fmt and fmt != "0":
-            return f"~~{fmt}~~ → **FREE**"
+            return f"~~{fmt}~~ ➔ **`FREE`**"
     except Exception:
         pass
-    return "**100% FREE**"
+    return "**`100% FREE`**"
 
 
 def build_embeds(games):
@@ -85,32 +87,39 @@ def build_embeds(games):
             url = game_url(g)
             image = pick_image(g)
             desc = (g.get("description") or "Grab this title for free on the Epic Games Store and keep it forever!").strip()
-            if len(desc) > 280:
-                desc = desc[:277].rstrip() + "..."
+            short_desc = desc if len(desc) <= 180 else desc[:177].rstrip() + "..."
 
             end_ts = parse_iso_timestamp(offer.get("endDate"))
             if end_ts:
-                deadline = f"<t:{end_ts}:R>\n-# Ends <t:{end_ts}:d>"
+                deadline = f"🟢 <t:{end_ts}:R>\n-# Ends <t:{end_ts}:d>"
             else:
-                deadline = f"Until {(offer.get('endDate') or '')[:10]}"
+                deadline = f"🟢 Until {(offer.get('endDate') or '')[:10]}"
 
             seller = (g.get("seller") or {}).get("name") or "Epic Games"
+            color = CARD_COLORS[len(embeds) % len(CARD_COLORS)]
 
             embed = {
                 "author": {
-                    "name": "🟢 FREE RIGHT NOW  •  EPIC GAMES STORE",
+                    "name": "🎁 FREE RIGHT NOW  •  EPIC GAMES STORE",
                     "url": STORE_URL,
                 },
                 "title": f"🎮  {g['title']}",
                 "url": url,
-                "description": f"> {desc}\n\n🛒 **[Claim Now on Epic Games Store ↗]({url})**",
-                "color": 0x2ECC71,
+                "description": (
+                    "```ansi\n"
+                    "\u001b[1;32m✨ 100% FREE TO KEEP FOREVER\u001b[0m \u001b[1;36m• WEEKLY DROP\u001b[0m\n"
+                    "```\n"
+                    f"# 🔥 [{g['title']}]({url})\n"
+                    f"> {short_desc}\n\n"
+                    f"## 👉 [🛒 CLAIM FREE GAME NOW ↗]({url})"
+                ),
+                "color": color,
                 "fields": [
-                    {"name": "💰 Value", "value": original_price_label(g), "inline": True},
-                    {"name": "🏢 Publisher", "value": seller, "inline": True},
+                    {"name": "💰 Store Value", "value": original_price_label(g), "inline": True},
+                    {"name": "🏢 Studio", "value": f"`{seller}`", "inline": True},
                     {"name": "⏳ Claim Before", "value": deadline, "inline": True},
                 ],
-                "footer": {"text": "Epic Games Weekly Freebie • Yours to keep forever"},
+                "footer": {"text": "🟩 Epic Games Weekly Freebie • Click Claim above"},
             }
             if image:
                 embed["image"] = {"url": image}
@@ -122,14 +131,20 @@ def build_embeds(games):
             url = game_url(g)
             start_ts = parse_iso_timestamp(next_offer.get("startDate"))
             when = f"unlocks <t:{start_ts}:R>" if start_ts else f"unlocks {(next_offer.get('startDate') or '')[:10]}"
-            upcoming_lines.append(f"• **[**{g['title']}**]({url})** — *{when}*")
+            upcoming_lines.append(f"🟣 **[**{g['title']}**]({url})** — *{when}*")
 
     if upcoming_lines and len(embeds) < 10:
         embeds.append({
-            "title": "🔮 Sneak Peek — Coming Next Week",
-            "description": "\n".join(upcoming_lines[:5]),
-            "color": 0x5865F2,
-            "footer": {"text": "Set a reminder • Next week's Epic rotation"},
+            "description": (
+                "```ansi\n"
+                "\u001b[1;35m🔮 NEXT WEEK'S ROTATION\u001b[0m \u001b[1;33m• SNEAK PEEK\u001b[0m\n"
+                "```\n"
+                "# 🔮 Coming Soon\n"
+                + "\n".join(upcoming_lines[:5])
+                + f"\n\n-# 👉 [Browse All Epic Freebies ↗]({STORE_URL})"
+            ),
+            "color": 0x9D4EDD,
+            "footer": {"text": "🟪 Set a reminder • Next week's Epic Store rotation"},
         })
 
     return embeds
@@ -144,7 +159,7 @@ def main():
     body = json.dumps({
         "username": "Epic Store • Freebie Radar",
         "content": (
-            "## 🎁 **This Week's Free Games Are Live!**\n"
+            "# 🎁 **This Week's Free Games Are Live!**\n"
             f"-# Grab them before the rotation resets • Checked <t:{now_ts}:R>"
         ),
         "embeds": embeds[:10],
