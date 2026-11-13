@@ -4,6 +4,12 @@ on:
   schedule:
     - cron: "*/15 * * * *"   # checks every 15 minutes (use "0,30 * * * *" for a private repo)
   workflow_dispatch:          # lets you run it manually to test
+    inputs:
+      force_post:
+        description: "Force post the latest announcement even if already posted"
+        required: false
+        default: "true"
+        type: boolean
 
 permissions:
   contents: write             # needed to save finals_state.json back to the repo
@@ -22,9 +28,11 @@ jobs:
           python-version: "3.12"
       - run: python finals_updates.py
         env:
-          # left side must stay DISCORD_WEBHOOK_URL; change only the right side
+          # left side must stay DISCORD_WEBHOOK_URL_4; change only the right side
           # if your secret has a different name
           DISCORD_WEBHOOK_URL_4: ${{ secrets.DISCORD_WEBHOOK_URL_4 }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          FORCE_POST: ${{ inputs.force_post }}
       - name: Save state
         run: |
           git config user.name "github-actions[bot]"
